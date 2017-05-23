@@ -18,6 +18,5 @@ class DBMS:
         raise NotImplementedError
 
 
-
 if __name__ == '__main__':
     db = DBMS()

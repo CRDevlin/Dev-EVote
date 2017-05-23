@@ -2,13 +2,7 @@ import json
 
 
 class Election():
-    def __init__(self, voters_file, nominees_file, final_vote_date):
-        try:
-            voters = json.load(open(voters_file))
-            nominees = json.load(open(nominees_file))
-        except ValueError as e:
-            raise e
-
+    def __init__(self, voters, nominees, final_vote_date):
         self.voters = voters
         self.nominees = nominees
         self.token = '' #TODO: Unique Election token
