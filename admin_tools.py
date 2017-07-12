@@ -37,7 +37,7 @@ def create_election(voters_file, nominees_file):
     try:
         voters = read_file(voters_file)
         nominees = read_file(nominees_file)
-        election = Election(voters, nominees, None)
+        election = Election(voters, nominees, None, 32)
     except ValueError as e:
         print("Error, invalid file path provided!")
     except FileNotFoundError as e:
@@ -52,5 +52,6 @@ def follow_existing_election(election_token):
     raise NotImplementedError
 
 if __name__ == '__main__':
-    file_content = read_file('data\sample_nominees.json')
+    create_election('data\sample_voters.json', 'data\sample_nominees.json')
+    # file_content = read_file('data\sample_nominees.json')
     print(file_content)

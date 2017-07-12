@@ -1,3 +1,8 @@
 {
-  "DATABASE": "elections.db"
+  "DATABASE": "elections.db",
+  "TOKEN_LEN": 32,
+  "FACULTY_START_ID": 100,
+  "ELECTION_START_ID": 0,
+  "MAX_NAME_LEN": 50,
+  "MAX_EMAIL_LEN": 50
 }

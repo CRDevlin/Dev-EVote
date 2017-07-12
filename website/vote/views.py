@@ -7,7 +7,17 @@ from .forms import CommentForm
 
 
 def index(request):
-    if request.method == "POST":
-        return HttpResponse("Received File")
-    else:
-        return HttpResponse("Hello, world. You're at the vote index.")
+    return HttpResponse(CommentForm())
+
+
+def detail(request, question_id):
+    return HttpResponse("You're looking at question {}.".format(question_id))
+
+
+def results(request, question_id):
+    response = "You're looking at the results of question {}.".format(question_id)
+    return HttpResponse(response)
+
+
+def vote(request, question_id):
+    return HttpResponse("You're voting on question {}.".format(question_id))

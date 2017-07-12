@@ -2,6 +2,7 @@ from django import forms
 
 
 class CommentForm(forms.Form):
-    name = forms.CharField()
-    url = forms.URLField()
-    comment = forms.CharField(widget=forms.TextInput)
+    name = forms.CharField(label="Enter your token:",
+                           widget=forms.PasswordInput,
+                           null=True,
+                           max_length=100)
