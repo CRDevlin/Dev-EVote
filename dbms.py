@@ -1,10 +1,13 @@
-import uuid
 import json
 import sqlite3
 import re
+import time
 import random
 random = random.SystemRandom() # Django uses this to create secret keys
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+
+
 
 class DBMS:
     def __init__(self):
@@ -18,10 +21,20 @@ class DBMS:
         self.cursor.execute('''
                             CREATE TABLE IF NOT EXISTS election
                             (
-                            election_id INTEGER PRIMARY KEY,
-                            anonymous_voting_bool INTEGER,
+                            election_id INTEGER PRIMARY KEY ASC,
+                            election_token_txt TEXT
+                            anon_voting_bool INTEGER,
                             multi_voting_bool INTEGER,
-                            final_vote_epoch INTEGER
+                            final_vote_epoch INTEGER,
+                            )
+                            ''')
+        self.cursor.execute('''
+                            CREATE TABLE IF NOT EXISTS faculty
+                            (
+                            faculty_id INTEGER PRIMARY KEY,
+                            faculty_last_name_txt TEXT,
+                            faculty_first_name_txt TEXT,
+                            faculty_email_txt TEXT
                             )
                             ''')
         self.cursor.execute('''
@@ -38,56 +51,38 @@ class DBMS:
                             faculty_id UNSIGNED INTEGER
                             )
                             ''')
-        self.cursor.execute('''
-                            CREATE TABLE IF NOT EXISTS faculty
-                            (
-                            faculty_id INTEGER PRIMARY KEY,
-                            faculty_last_name_txt TEXT,
-                            faculty_first_name_txt TEXT,
-                            faculty_email_txt TEXT
-                            )
-                            ''')
 
     def read_election(self, election_id):
         self.cursor.execute('''
                             SELECT * FROM election WHERE election_ID = (?)
                             ''', (election_id, ))
-        result = self.cursor.fetchone()
+        result = self.cursor.fetchmany(10)
         return result
 
-        # self.voters = voters
-        # self.nominees = nominees
-        # self.anonymous_voting = False
-        # self.multi_vote = False
-        # self.final_vote_date = final_vote_date
+    def write_election(self, e):
+        self.validate_input(e, 'election')
 
-    def write_election(self, election):
-        self.validate_input(election, 'election')
-
-        voters = election.voters
-        nominees = election.nominees
-        anonymous = election.anonymous_voting
-        multi = election.multi_vote
-        final_date = election.final_vote_date.timestamp()
         self.cursor.execute('''
-                            INSERT INTO election VALUES (?, ?, ?)
-                            ''', (anonymous, multi, final_date))
+                            INSERT INTO election(election_token, anon_voting_bool, multi_voting_bool, final_vote_epoch)
+                            VALUES (?, ?, ?, ?)
+                            ''', (e.token, e.anonymous_voting, e.multi_vote, e.final_vote_date))
+
         self.cursor.execute('''
                             SELECT last_insert_rowid();
                             ''')
-        election_id = self.cursor.fetchone()
-        for voter in voters:
+        election_id = self.cursor.fetchone()[0]
+        for voter in e.voters:
             faculty_id = self.write_faculty(voter)
             token = ''.join(random.choice(alphabet) for _ in range(self.token_len))
             weight = voter['WEIGHT']
             self.cursor.execute('''
-                                INSERT INTO voters (?, ?, ?, ?)
+                                INSERT INTO voters VALUES (?, ?, ?, ?)
                                 ''', (election_id, faculty_id, token, weight))
 
-        for nominee in nominees:
+        for nominee in e.nominees:
             faculty_id = self.write_faculty(nominee)
             self.cursor.execute('''
-                                INSERT INTO nominees (?, ?)
+                                INSERT INTO nominees VALUES (?, ?)
                                 ''', (election_id, faculty_id))
 
     def validate_input(self, struct, struct_type):
@@ -111,28 +106,44 @@ class DBMS:
             if name.match(struct.email) is None:
                 raise ValueError('{} is not a valid email address (must be \'@csuci.edu\')'.format(struct.email))
 
-    def write_faculty(self, faculty):
-        first_name = faculty['FIRST_NAME']
-        last_name = faculty['LAST_NAME']
-        email = faculty['EMAIL']
+    def write_faculty(self, f):
 
         self.cursor.execute('''
-                            SELECT faculty_id WHERE faculty_email_txt = (?)
-                            ''', (email,))
+                            SELECT faculty_id FROM faculty WHERE faculty_email_txt = (?)
+                            ''', (f['EMAIL'],))
         existing_email = self.cursor.fetchone()
         if existing_email is None:
             self.cursor.execute('''
-                                INSERT INTO faculty (?, ?, ?)
-                                ''', (last_name, first_name, email))
+                                INSERT INTO faculty (faculty_last_name_txt, faculty_first_name_txt, faculty_email_txt)
+                                VALUES (?, ?, ?)
+                                ''', (f['LAST_NAME'], f['FIRST_NAME'], f['EMAIL']))
             self.cursor.execute('''
                                 SELECT last_insert_rowid();
                                 ''')
-            return self.cursor.fetchone()
+            return self.cursor.fetchone()[0]
         else:
-            return 0
+            return -1
 
     def edit_election(self):
         raise NotImplementedError
+
+    def lookup_token(self, token):
+        self.cursor.execute('''
+                            SELECT (election_id, faculty_id) FROM voters WHERE token_txt = (?)
+                            ''', (token,))
+
+    def get_active_elections(self):
+        epoch = int(time.time())
+        self.cursor.execute('''
+                            SELECT * FROM election WHERE final_vote_epoch > (?)
+                            ''', (epoch,))
+        self.cursor.fetchall()
+
+    def get_expired_elections(self, n):
+        epoch = int(time.time())
+        self.cursor.execute('''
+                            SELECT * FROM election WHERE final_vote_epoch <= (?)
+                            ''', (epoch,))
 
     def save(self):
         self.conn.commit()
