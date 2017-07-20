@@ -2,13 +2,17 @@ import uuid
 import json
 import sqlite3
 import re
+import random
+random = random.SystemRandom() # Django uses this to create secret keys
+alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 class DBMS:
     def __init__(self):
         # try:
         settings = json.load(open('data/settings.json'))
-        self.conn = sqlite3.connect(    settings['DATABASE'])
+        self.conn = sqlite3.connect(settings['DATABASE'])
         self.cursor = self.conn.cursor()
+        self.token_len = settings['TOKEN_LEN']
         self.email_len = settings['MAX_EMAIL_LEN']
         self.name_len = settings['MAX_NAME_LEN']
         self.cursor.execute('''
@@ -51,13 +55,15 @@ class DBMS:
         result = self.cursor.fetchone()
         return result
 
-        self.voters = voters
-        self.nominees = nominees
-        self.anonymous_voting = False
-        self.multi_vote = False
-        self.final_vote_date = final_vote_date
+        # self.voters = voters
+        # self.nominees = nominees
+        # self.anonymous_voting = False
+        # self.multi_vote = False
+        # self.final_vote_date = final_vote_date
 
     def write_election(self, election):
+        self.validate_input(election, 'election')
+
         voters = election.voters
         nominees = election.nominees
         anonymous = election.anonymous_voting
@@ -70,12 +76,19 @@ class DBMS:
                             SELECT last_insert_rowid();
                             ''')
         election_id = self.cursor.fetchone()
+        for voter in voters:
+            faculty_id = self.write_faculty(voter)
+            token = ''.join(random.choice(alphabet) for _ in range(self.token_len))
+            weight = voter['WEIGHT']
+            self.cursor.execute('''
+                                INSERT INTO voters (?, ?, ?, ?)
+                                ''', (election_id, faculty_id, token, weight))
 
-    def write_voters(self):
-        return 0
-
-    def write_nominees(self):
-        return 0
+        for nominee in nominees:
+            faculty_id = self.write_faculty(nominee)
+            self.cursor.execute('''
+                                INSERT INTO nominees (?, ?)
+                                ''', (election_id, faculty_id))
 
     def validate_input(self, struct, struct_type):
         name = re.compile('[a-z]+', re.IGNORECASE)
@@ -99,19 +112,17 @@ class DBMS:
                 raise ValueError('{} is not a valid email address (must be \'@csuci.edu\')'.format(struct.email))
 
     def write_faculty(self, faculty):
-        first_name = faculty.first_name
-        last_name = faculty.last_name
-        email = faculty.email
-
-        self.validate_input(faculty, 'faculty')
+        first_name = faculty['FIRST_NAME']
+        last_name = faculty['LAST_NAME']
+        email = faculty['EMAIL']
 
         self.cursor.execute('''
-                            SELECT * WHERE faculty_email_txt = (?)
+                            SELECT faculty_id WHERE faculty_email_txt = (?)
                             ''', (email,))
         existing_email = self.cursor.fetchone()
         if existing_email is None:
             self.cursor.execute('''
-                                INSERT INTO faculty NAME (?, ?, ?)
+                                INSERT INTO faculty (?, ?, ?)
                                 ''', (last_name, first_name, email))
             self.cursor.execute('''
                                 SELECT last_insert_rowid();
