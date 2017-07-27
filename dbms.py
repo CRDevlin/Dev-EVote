@@ -7,8 +7,6 @@ random = random.SystemRandom() # Django uses this to create secret keys
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 
-
-
 class DBMS:
     def __init__(self):
         # try:

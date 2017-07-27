@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^vote/', include('vote.urls')),
+    # url(r'^$', include('vote.urls')), TODO HOMEPAGE
     url(r'^admin/', admin.site.urls),
 ]

@@ -3,21 +3,25 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.http import HttpResponse
-from .forms import CommentForm
 
 
 def index(request):
-    return HttpResponse(CommentForm())
+    return HttpResponse("Hi")
 
 
-def detail(request, question_id):
-    return HttpResponse("You're looking at question {}.".format(question_id))
-
-
-def results(request, question_id):
-    response = "You're looking at the results of question {}.".format(question_id)
-    return HttpResponse(response)
-
-
-def vote(request, question_id):
-    return HttpResponse("You're voting on question {}.".format(question_id))
+def vote(request):
+    return HttpResponse('''
+                        <!doctype html>
+                        <html>
+                        <head>
+                            <title>CSUCI E-Vote</title>
+                        </head>
+                        <body>
+                        <p><strong><span style="font-family:arial,helvetica,sans-serif;">Enter your token</span></strong></p>
+                        <form method="post" name="submit_token" action="/submit_token.php">
+                        <p><input maxlength="32" size="32" name="token_textbox" type="password" value="" /></p>
+                        </form>
+                        <p><input name="submit_button" type="submit" value="Submit" /></p>
+                        </body>
+                        </html>
+                        ''')

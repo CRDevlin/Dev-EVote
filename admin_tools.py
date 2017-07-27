@@ -54,4 +54,3 @@ def follow_existing_election(election_token):
 if __name__ == '__main__':
     create_election('data\sample_voters.json', 'data\sample_nominees.json')
     # file_content = read_file('data\sample_nominees.json')
-    print(file_content)
