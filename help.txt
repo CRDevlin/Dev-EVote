@@ -1,3 +1,0 @@
-Javascript web tokens
-
-Node and Angular J.S.

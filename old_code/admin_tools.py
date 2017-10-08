@@ -1,8 +1,8 @@
-import json
 import csv
+import json
 
-from exceptions import *
 from election import Election
+from exceptions import *
 
 
 def read_file(file):
