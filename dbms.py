@@ -68,6 +68,7 @@ class DBMS:
         self.cursor.execute('''
                             SELECT last_insert_rowid();
                             ''')
+
         election_id = self.cursor.fetchone()[0]
         for voter in e.voters:
             faculty_id = self.write_faculty(voter)

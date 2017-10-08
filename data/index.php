@@ -29,7 +29,7 @@ function scan_input($data) {
 }
 
 function isValid($token) {
-    return 0
+    return 0;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -65,7 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }?>
-
 
 </body>
 </html>
