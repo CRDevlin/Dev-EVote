@@ -9,7 +9,6 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^config/$', views.admin),
     url(r'^vote/$', views.vote),
-    # url(r'^config$', RedirectView.as_view(url='/admin/')),
     url(r'^$', RedirectView.as_view(url='/vote/')),
     url(r'^', views.http404)
 ]

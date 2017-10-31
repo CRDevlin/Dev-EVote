@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.template import RequestContext, loader
 
 from .models import Record
+from .forms import TokenForm
 
 def http404(request):
     return HttpResponseNotFound(render(request, "404.html"))
@@ -18,10 +19,15 @@ def admin(request):
 
 def vote(request):
     # If form has posted
-    if request.POST:
-        if 'token' in request.POST:
-            token = request.POST.get('token', '')
-            record = Record.objects.get(id=token)
+    if request.method == 'POST':
+        form = TokenForm(request.POST)
+
+        if form.is_valid():
+            token = form.cleaned_data['token']
+            # tue = Record.objects.get(token=token)
             return HttpResponse("Record Obtained!")
     else:
-        return render(request, "vote.html")
+        form = TokenForm()
+
+    return render(request, "vote.html", {'form': form})
+

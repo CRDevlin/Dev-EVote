@@ -1,8 +1,7 @@
 from django import forms
 
 
-# class CommentForm(forms.Form):
-#     name = forms.CharField(label="Enter your token:",
-#                            widget=forms.PasswordInput,
-#                            null=True,
-#                            max_length=100)
+class TokenForm(forms.Form):
+    token = forms.CharField(label='Enter your Token', max_length=32, widget=forms.PasswordInput())
+
+

@@ -1,27 +1,11 @@
-{% block title_html %}
-    CSUCI E-Vote
+{% block title %}
+  <title>CSUCI E-Vote</title>
 {% endblock %}
-{% block h1 %}
-    CSUCI E-Vote
-{% endblock %}
-{% block h2 %}
-    Enter your token
-{% endblock %}
-{% block article_content %}
-<form method="post" action="{% url "vote" %}" >
-  <table>
-    <tr>
-      <td>Enter Token</td>
-      <td>
-        <input maxlength="32" size="32" name="token" type="password" value="" />
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <input name="submit" type="submit" value="Submit" />
-      </td>
-    </tr>
-  </table>
+{% block content %}
+<form method="post" action="">
+  {% csrf_token %}
+  {{ form }}
+  <br><br>
+  <input type="submit", value="Submit" />
 </form>
 {% endblock %}

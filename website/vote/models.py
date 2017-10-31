@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 token_len = 32
 max_name_len = 50
 max_email_len = 50
