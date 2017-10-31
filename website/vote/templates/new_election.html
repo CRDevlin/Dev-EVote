@@ -1,0 +1,28 @@
+{% include "base.html" %}
+{% block content %}
+<form method="post" action="">
+  {% csrf_token %}
+  <label>Voters File.</label><br><label>Accepted file formats: .json</label>
+  <br>
+  {{ form.voter_file }}
+  <br><br>
+  <label>Nominees File.</label><br><label>Accepted file formats: .json</label>
+  <br>
+  {{ form.nominee_file }}
+  <br><br>
+  {{ form.date.label }}
+  <br>
+  {{ form.date }}
+  <br><br>
+  {{ form.multi_vote.label }}
+  <br>
+  {{ form.multi_vote }}
+  <br><br>
+    {{ form.anonymous.label }}
+  <br>
+  {{ form.anonymous }}
+  <br>
+  <br>
+  <input type="submit", value="Create New Election" />
+</form>
+{% endblock %}

@@ -2,9 +2,9 @@
 {% block content %}
 <form method="post" action="">
   {% csrf_token %}
-  {{ form.choice.label }}
+  {{ form.token.label }}
   <br>
-  {{ form.choice }}
+  {{ form.token }}
   <br><br>
   <input type="submit", value="Submit" />
 </form>
