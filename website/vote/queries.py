@@ -71,4 +71,3 @@ def set_nominee(token, nominee):
         r.save()
     except Election.DoesNotExist:
         raise ValueError("Invalid token or the election no longer exists")
-
