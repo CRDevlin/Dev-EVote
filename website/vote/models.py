@@ -27,5 +27,6 @@ class Record(models.Model):
 
 
 class Nominee(models.Model):
-    election = models.ForeignKey(Faculty, verbose_name="Faculty", null=False)
-    name = models.CharField(max_length=txt_length, verbose_name="Value")
+    election = models.ForeignKey(Election, verbose_name="Election", null=False)
+    faculty = models.ForeignKey(Faculty, verbose_name="Faculty", null=False)
+

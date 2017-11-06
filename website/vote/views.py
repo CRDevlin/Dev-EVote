@@ -3,9 +3,13 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 
 from .forms import *
-from .validation import *
+from .queries import *
+from .validation import validate_json, validate_content
+from .handlers import handle_uploaded_file
 
 max_chunk_size = 1024
+voter_path = 'uploaded/voter.json'
+nominee_path = 'uploaded/nominee.json'
 
 def http404(request):
     return HttpResponseNotFound(render(request, "404.html"))
@@ -50,11 +54,17 @@ def new_election(request):
     if request.method == 'POST':
         form = ElectionUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            success = handle_uploaded_file('uploaded/voter.json', request.FILES['voter_file'])
-            success = handle_uploaded_file('uploaded/nominee.json', request.FILES['nominee_file'])
-            voters = json.load(open('uploaded/voter.json'))
-            nominees = json.load(open('uploaded/nominee.json'))
-            add_faculty(voters, nominees)
+            handle_uploaded_file(voter_path, request.FILES['voter_file'])
+            handle_uploaded_file(nominee_path, request.FILES['nominee_file'])
+            voters = json.load(open(voter_path))
+            nominees = json.load(open(nominee_path))
+            validate_json(voters,'voter')
+            validate_json(nominees, 'nominee')
+            validate_content(voters)
+            validate_content(nominees)
+            add_faculty(voters)
+            add_faculty(nominees)
+
             return HttpResponse("Uploaded")
         else:
             print(form.errors)

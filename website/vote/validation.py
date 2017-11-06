@@ -1,13 +1,17 @@
 import re
+import json
 
 faculty_keys = ['FIRST_NAME', 'LAST_NAME', 'EMAIL']
 weight_key = 'WEIGHT'
 name = re.compile('[a-z]+', re.IGNORECASE)
-email = re.compile('[a-z0-9.]@csuci.edu', re.IGNORECASE)
+email = re.compile('[a-z0-9.]+@csuci.edu', re.IGNORECASE)
 
 
 def validate_content(file):
-    settings = json.load(open('data/settings.json'))
+    try:
+        settings = json.load(open('../sample_data/settings.json'))
+    except FileNotFoundError:
+        settings = json.load(open('sample_data/settings.json'))
     email_len = settings['MAX_EMAIL_LEN']
     name_len = settings['MAX_NAME_LEN']
     for i, entity in enumerate(file):
@@ -46,7 +50,7 @@ def validate_json(file, json_type):
     else:
         raise ValueError("Invalid value for \'type\'.")
 
-    validate_content()
+    validate_content(file)
 
 
 def validate_voter_json(voters):
@@ -85,5 +89,7 @@ def validate_faculty_json(faculty):
 if __name__ == '__main__':
     import json
 
-    voter_file = json.load(open('../uploaded/nominee.json'))
-    validate_json(voter_file, 'nominee')
+    voter_file = json.load(open('../uploaded/voter.json'))
+    nominee_file = json.load(open('../uploaded/nominee.json'))
+    validate_json(voter_file, 'voter')
+    validate_json(nominee_file, 'nominee')
