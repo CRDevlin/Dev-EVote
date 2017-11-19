@@ -18,15 +18,14 @@ class Faculty(models.Model):
     email = models.CharField(max_length=max_email_len)
 
 
-class Record(models.Model):
-    token = models.CharField(max_length=token_len, verbose_name="Voter Token", primary_key=True)
-    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter")
-    nominee = models.ForeignKey(Faculty, verbose_name="Faculty", null=True, related_name="Nominee")
-    election = models.ForeignKey(Election, verbose_name="Election", null=False)
-    weight = models.FloatField(verbose_name="Voter Weight")
-
-
 class Nominee(models.Model):
-    election = models.ForeignKey(Election, verbose_name="Election", null=False)
-    faculty = models.ForeignKey(Faculty, verbose_name="Faculty", null=False)
+    election = models.ForeignKey(Election, verbose_name="Election", null=True)
+    faculty = models.ForeignKey(Faculty, verbose_name="Faculty", null=True)
 
+
+class Record(models.Model):
+    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter")
+    election = models.ForeignKey(Election, verbose_name="Election", null=False, related_name="Election")
+    choice = models.ForeignKey(Nominee, verbose_name="Nominee", null=True, related_name="Nominee")
+    token = models.CharField(max_length=token_len, verbose_name="Voter Token", unique=True)
+    weight = models.FloatField(verbose_name="Voter Weight")
