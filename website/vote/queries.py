@@ -61,12 +61,21 @@ def insert_faculty(faculty, is_voter):
     return res, weight
 
 
+def check_valid_token(token):
+    try:
+        Record.objects.get(token=token)
+        # if e.final_vote > dt.now():
+        #    raise ValueError("This election expired.")
+    except Record.DoesNotExist:
+        raise ValueError("Invalid token")
+
+
 def get_nominees(token):
     try:
         r = Record.objects.get(token=token)  # Get a single record
         e = r.election
-        if e.final_vote > dt.now():
-            raise ValueError("This election expired.")
+        # if e.final_vote > dt.now():
+        #    raise ValueError("This election expired.")
         n = Nominee.objects.filter(election=e)  # Get multiple model objects
         return list(n)
     except Record.DoesNotExist:

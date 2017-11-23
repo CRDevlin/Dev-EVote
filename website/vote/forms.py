@@ -1,19 +1,16 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
-from .queries import *
+
 
 class TokenForm(forms.Form):
     token = forms.CharField(label='Enter your Token:', max_length=32, widget=forms.PasswordInput())
 
 
 class VoteForm(forms.Form):
-    CHOICES = [('1', 'Test'), ('2', 'Test2')]
-    choice = forms.ChoiceField(label='Candidates:', choices=CHOICES, widget=forms.RadioSelect)
-    # def __init__(token):
-    #    choice = forms.ModelChoiceField(label='Candidates:',
-    #                                    queryset=Record.objects.get(token=token),
-    #                                    widget=forms.RadioSelect())
-    #    super.__init__()
+    def __init__(self, choices, *args, **kwargs):
+        super(VoteForm, self).__init__(*args, **kwargs)
+
+        self.fields['choice'] = forms.ChoiceField(label='Candidates:', choices=choices, widget=forms.RadioSelect)
 
 
 class ElectionUploadForm(forms.Form):

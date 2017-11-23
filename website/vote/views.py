@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
 from .forms import *
 from .handlers import handle_uploaded_file
@@ -30,7 +30,13 @@ def index(request):
         if form.is_valid():
             token = form.cleaned_data['token']
 
-            return vote(token)
+            try:
+                validate_token(request, token)
+                return HttpResponseRedirect("/vote/")
+            except LookupError as e:
+                print(e)
+            except ValueError as e:
+                print(e)
     else:
         form = TokenForm()
 
@@ -38,14 +44,28 @@ def index(request):
 
 
 def vote(request):
+    choices = []
+
+    if 'valid_token' not in request.session:
+        return HttpResponseRedirect("/")
+
+    nominees = find_nominees(request.session['valid_token'])
+
+    for i, nominee in enumerate(nominees):
+        faculty = nominee.faculty
+        full_name = faculty.first_name + " " + faculty.last_name
+        choices.append((str(i), full_name))
+
     if request.method == 'POST':
-        form = VoteForm(request.POST)
+        form = VoteForm(choices, request.POST)
 
         if form.is_valid():
-            choice = form.cleaned_data['choice']
-            return HttpResponse(choice)
+            choice = int(form.cleaned_data['choice'])
+            set_nominee(request.session['valid_token'], nominees[choice])
+            request.session.flush()
+            return HttpResponseRedirect("/")
     else:
-        form = VoteForm()
+        form = VoteForm(choices)
 
     return render(request, "vote.html", {'form': form})
 

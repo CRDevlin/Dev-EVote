@@ -19,3 +19,11 @@ def create_election(voter_path, nominee_path, anon, multi_vote, date, time):
     insert_nominee(faculty, election)
     insert_record(voters, weights, election)
 
+
+def validate_token(request, token):
+    check_valid_token(token)
+    request.session['valid_token'] = token
+
+
+def find_nominees(token):
+    return get_nominees(token)
