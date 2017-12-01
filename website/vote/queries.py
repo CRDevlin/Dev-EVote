@@ -6,7 +6,7 @@ from .models import *
 random = random.SystemRandom()  # Django uses this to create secret keys
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 token_len = 32
-
+elec_token_len = 9
 
 def insert_nominee(ref_nominees, ref_election):
     res = []
@@ -41,7 +41,10 @@ def insert_record(ref_voters, ref_weights, ref_election):
 
 
 def insert_election(anon, multi, date, time):
-    e = Election(anon_voting=anon, multi_voting=multi, final_vote=dt.combine(date, time))
+    global elec_token_len
+
+    token = ''.join(random.choice(alphabet) for _ in range(elec_token_len))
+    e = Election(anon_voting=anon, multi_voting=multi, final_vote=dt.combine(date, time), token=token)
     e.save()
     return e
 

@@ -1,6 +1,7 @@
 from django.db import models
 
 token_len = 32
+elec_token_len = 9
 max_name_len = 50
 max_email_len = 50
 txt_length = 64
@@ -10,6 +11,7 @@ class Election(models.Model):
     anon_voting = models.BooleanField(verbose_name="Anonymous Voting")
     multi_voting = models.BooleanField(verbose_name="Vote Multiple Times")
     final_vote = models.DateTimeField(verbose_name="DateTime Vote By")
+    token = models.CharField(max_length=elec_token_len, verbose_name="Election Token", unique=True)
 
 
 class Faculty(models.Model):

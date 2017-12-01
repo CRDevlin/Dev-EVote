@@ -2,8 +2,16 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
 
 
+class ElectionResTokenForm(forms.Form):
+    def __init__(self, token_len, *args, **kwargs):
+        super(ElectionResTokenForm, self).__init__(*args, **kwargs)
+        self.fields['token'] = forms.CharField(label='Enter the Election Token:', max_length=token_len, widget=forms.PasswordInput())
+
+
 class TokenForm(forms.Form):
-    token = forms.CharField(label='Enter your Token:', max_length=32, widget=forms.PasswordInput())
+    def __init__(self, token_len, *args, **kwargs):
+        super(TokenForm, self).__init__(*args, **kwargs)
+        self.fields['token'] = forms.CharField(label='Enter your Token:', max_length=token_len, widget=forms.PasswordInput())
 
 
 class VoteForm(forms.Form):
