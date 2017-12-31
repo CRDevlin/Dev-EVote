@@ -1,12 +1,11 @@
 import random
 from datetime import datetime as dt
 from .models import *
-
+from website.settings import CONFIG
 
 random = random.SystemRandom()  # Django uses this to create secret keys
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-token_len = 32
-elec_token_len = 9
+
 
 def insert_nominee(ref_nominees, ref_election):
     res = []
@@ -22,12 +21,11 @@ def insert_nominee(ref_nominees, ref_election):
 
 
 def insert_record(ref_voters, ref_weights, ref_election):
-    global token_len
     res = []
     i = 0
 
     while i < len(ref_voters):
-        token = ''.join(random.choice(alphabet) for _ in range(token_len))
+        token = ''.join(random.choice(alphabet) for _ in range(CONFIG['VOTE_TOKEN_LEN']))
         r = Record(token=token, weight=ref_weights[i])
         r.voter = ref_voters[i]
         r.election = ref_election
@@ -41,9 +39,7 @@ def insert_record(ref_voters, ref_weights, ref_election):
 
 
 def insert_election(anon, multi, date, time):
-    global elec_token_len
-
-    token = ''.join(random.choice(alphabet) for _ in range(elec_token_len))
+    token = ''.join(random.choice(alphabet) for _ in range(CONFIG['ELEC_TOKEN_LEN']))
     e = Election(anon_voting=anon, multi_voting=multi, final_vote=dt.combine(date, time), token=token)
     e.save()
     return e

@@ -16,6 +16,16 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+CONFIG = {
+    'ELEC_TOKEN_LEN': 9,
+    'VOTE_TOKEN_LEN': 32,
+    'MAX_EMAIL_LEN': 50,
+    'MAX_NAME_LEN': 50,
+    'MAX_CHUNK_SIZE': 1024,
+    'NOMINEE_PATH': 'uploaded/nominee.json',
+    'VOTER_PATH': 'uploaded/voter.json'
+}
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
