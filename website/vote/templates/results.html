@@ -1,0 +1,16 @@
+{% include "base.html" %}
+{% block content %}
+{% csrf_token %}
+
+{% for obj in ballot %}
+  {{obj.0}}
+{% endfor %}
+
+{% for o in result %}
+  {{o.0}}: {{o.1}}%
+  <br>
+{% endfor %}
+
+<br>
+The Winner is :
+{% endblock %}

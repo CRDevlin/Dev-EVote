@@ -28,7 +28,8 @@ def index(request):
             token = form.cleaned_data['token']
 
             try:
-                validate_token(request, token)
+                validate_token(token)
+                request.session['valid_token'] = token
                 return HttpResponseRedirect("/vote/")
             except LookupError as e:
                 print(e)
@@ -67,10 +68,10 @@ def results(request):
 
         if form.is_valid():
             token = form.cleaned_data['token']
-
             try:
-                validate_token(request, token)
-                return HttpResponseRedirect("/vote/")
+                # validate_token(request, token)
+                res = get_election_results(token)
+                return render(request, "results.html", {'result': res['RESULT'], 'winner': None})
             except LookupError as e:
                 print(e)
             except ValueError as e:

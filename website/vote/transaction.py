@@ -21,9 +21,8 @@ def create_election(voter_path, nominee_path, anon, multi_vote, date, time):
     return election.token
 
 
-def validate_token(request, token):
+def validate_token(token):
     check_valid_token(token)
-    request.session['valid_token'] = token
 
 
 def get_nominee_choices(token):
@@ -39,3 +38,7 @@ def get_nominee_choices(token):
 def set_nominee_choice(token, choice):
     nominees = get_nominees(token)
     set_nominee(token, nominees[int(choice)])
+
+
+def get_election_results(token):
+    return get_results(token)

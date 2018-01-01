@@ -1,6 +1,9 @@
 from django.db import models
 from website.settings import CONFIG
 
+"""
+The .gliffy file contains ERD
+"""
 
 class Election(models.Model):
     anon_voting = models.BooleanField(verbose_name="Anonymous Voting")
@@ -21,8 +24,8 @@ class Nominee(models.Model):
 
 
 class Record(models.Model):
-    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter")
-    election = models.ForeignKey(Election, verbose_name="Election", null=False, related_name="Election")
     choice = models.ForeignKey(Nominee, verbose_name="Nominee", null=True, related_name="Nominee")
+    election = models.ForeignKey(Election, verbose_name="Election", null=False, related_name="Election")
+    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter")
     token = models.CharField(max_length=CONFIG['VOTE_TOKEN_LEN'], verbose_name="Voter Token", unique=True)
     weight = models.FloatField(verbose_name="Voter Weight")

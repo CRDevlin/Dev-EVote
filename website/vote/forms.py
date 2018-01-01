@@ -17,7 +17,6 @@ class TokenForm(forms.Form):
 class VoteForm(forms.Form):
     def __init__(self, choices, *args, **kwargs):
         super(VoteForm, self).__init__(*args, **kwargs)
-
         self.fields['choice'] = forms.ChoiceField(label='Candidates:', choices=choices, widget=forms.RadioSelect)
 
 

@@ -2,6 +2,8 @@ import random
 from datetime import datetime as dt
 from .models import *
 from website.settings import CONFIG
+from django.db.models import Sum
+
 
 random = random.SystemRandom()  # Django uses this to create secret keys
 alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -92,3 +94,29 @@ def set_nominee(token, ref_nominee):
         r.save()
     except Record.DoesNotExist:
         raise ValueError("Invalid token")
+
+
+def get_results(token):
+    """
+    Get election results
+    :param token: Election token
+    :return:
+    """
+    res = {}
+    e = Election.objects.get(token=token)
+    r = Record.objects.filter(election=e)
+    if not e.anon_voting:
+        res['BALLOTS'] = []
+        for record in list(r):
+            v = record.voter
+            n = record.choice.faculty
+            res['BALLOTS'].append((v.first_name + ' ' + v.last_name, n.first_name + ' ' + n.last_name))
+
+    res['RESULT'] = []
+    R = r.values('choice').annotate(total_weight=Sum('weight'))
+    for record in R:
+        f = Nominee.objects.get(id=record['choice']).faculty
+        percent = record['total_weight'] * 100
+        res['RESULT'].append((f.first_name + ' ' + f.last_name, percent))
+
+    return res
