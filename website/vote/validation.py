@@ -1,19 +1,24 @@
+"""
+validation.py
+Validates the integrity of the data being sent from a client.
+"""
+
 import re
 import json
+from website.settings import CONFIG
 
-faculty_keys = ['FIRST_NAME', 'LAST_NAME', 'EMAIL']
 weight_key = 'WEIGHT'
 name = re.compile('[a-z]+', re.IGNORECASE)
 email = re.compile('[a-z0-9.]+@csuci.edu', re.IGNORECASE)
 
 
 def validate_content(file):
-    try:
-        settings = json.load(open('../sample_data/settings.json'))
-    except FileNotFoundError:
-        settings = json.load(open('sample_data/settings.json'))
-    email_len = settings['MAX_EMAIL_LEN']
-    name_len = settings['MAX_NAME_LEN']
+    """
+    Validate capacity range of the contents of the file, Throws an error if failure
+    :param file: Loaded file
+    """
+    email_len = CONFIG['MAX_EMAIL_LEN']
+    name_len = CONFIG['MAX_NAME_LEN']
     for i, entity in enumerate(file):
         # First Name
         if len(entity['FIRST_NAME']) > name_len:
@@ -36,6 +41,11 @@ def validate_content(file):
 
 
 def validate_json(file, json_type):
+    """
+    Validate voter or nominee json file, Throws an error if failure
+    :param file: Loaded file
+    :param json_type: 'voter' if voter json file, 'nominee' if nominee json file
+    """
     if not isinstance(file, list):
         raise AssertionError("{} json file must be start with a list".format(json_type))
     if len(file) == 0:
@@ -53,13 +63,17 @@ def validate_json(file, json_type):
     validate_content(file)
 
 
-def validate_voter_json(voters):
+def validate_voter_json(file):
+    """
+    Validate voter json weights, Throws an error if failure
+    :param file: Loaded voter file
+    """
     global weight_key
 
     sigma = 0.0
-    validate_faculty_json(voters)
+    validate_faculty_json(file)
 
-    for i, voter in enumerate(voters):
+    for i, voter in enumerate(file):
         if weight_key not in voter:
             raise AssertionError("Required key \'{}\' is missing from this json. Object #{}".format(weight_key, i))
         if not isinstance(voter[weight_key], float):
@@ -73,11 +87,14 @@ def validate_voter_json(voters):
         raise AssertionError("Invalid total weight. The sum of all the weights must equal 1.0")
 
 
-def validate_faculty_json(faculty):
-    global faculty_keys
+def validate_faculty_json(file):
+    """
+    Validate faculty contents, Throws an error if failure
+    :param file: Loaded voter file
+    """
 
-    for i, person in enumerate(faculty):
-        for key in faculty_keys:
+    for i, person in enumerate(file):
+        for key in CONFIG['FACULTY_KEYS']:
             if key not in person:
                 raise AssertionError("Required key \'{}\' is missing from this json. Object #{}".format(key, i))
             if not isinstance(person[key], str):

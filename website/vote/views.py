@@ -8,6 +8,10 @@ from .transaction import *
 from website.settings import CONFIG
 
 
+def admin(request):
+    return render(request, "admin.html")
+
+
 def http404(request):
     return HttpResponseNotFound(render(request, "404.html"))
 
@@ -16,19 +20,15 @@ def http500(request):
     return HttpResponseNotFound(render(request, "500.html"))
 
 
-def admin(request):
-    return render(request, "admin.html")
-
-
 def index(request):
     if request.method == 'POST':
-        form = TokenForm(CONFIG['VOTE_TOKEN_LEN'], request.POST)
+        form = VoteTokenForm(CONFIG['VOTE_TOKEN_LEN'], request.POST)
 
         if form.is_valid():
             token = form.cleaned_data['token']
 
             try:
-                validate_token(token)
+                validate_voter_token(token)
                 request.session['valid_token'] = token
                 return HttpResponseRedirect("/vote/")
             except LookupError as e:
@@ -36,7 +36,7 @@ def index(request):
             except ValueError as e:
                 print(e)
     else:
-        form = TokenForm(CONFIG['VOTE_TOKEN_LEN'])
+        form = VoteTokenForm(CONFIG['VOTE_TOKEN_LEN'])
 
     return render(request, "token_form.html", {'form': form})
 
@@ -69,9 +69,9 @@ def results(request):
         if form.is_valid():
             token = form.cleaned_data['token']
             try:
-                # validate_token(request, token)
+                validate_election_token(token)
                 res = get_election_results(token)
-                return render(request, "results.html", {'result': res['RESULT'], 'winner': None})
+                return render(request, "results.html", {'ballot': res['BALLOT'], 'result': res['RESULT'], 'winner': res['WINNER']})
             except LookupError as e:
                 print(e)
             except ValueError as e:

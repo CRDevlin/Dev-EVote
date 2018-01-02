@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+# Configuration settings specific to this website
 CONFIG = {
     'ELEC_TOKEN_LEN': 9,
     'VOTE_TOKEN_LEN': 32,
@@ -23,7 +23,8 @@ CONFIG = {
     'MAX_NAME_LEN': 50,
     'MAX_CHUNK_SIZE': 1024,
     'NOMINEE_PATH': 'uploaded/nominee.json',
-    'VOTER_PATH': 'uploaded/voter.json'
+    'VOTER_PATH': 'uploaded/voter.json',
+    'FACULTY_KEYS': ['FIRST_NAME', 'LAST_NAME', 'EMAIL']
 }
 
 # Quick-start development settings - unsuitable for production

@@ -2,15 +2,26 @@
 {% block content %}
 {% csrf_token %}
 
-{% for obj in ballot %}
-  {{obj.0}}
-{% endfor %}
-
-{% for o in result %}
-  {{o.0}}: {{o.1}}%
+{% if ballot != None %}
+Ballots:
+<br>
+{% for o in ballot %}
+  <b>{{o.0}}</b> voted for <b>{{o.1}}</b>
   <br>
 {% endfor %}
+<br><br>
+{% endif %}
 
+Scores:
 <br>
-The Winner is :
+{% for o in result %}
+  {{o.0}}: {{o.1}}
+  <br>
+{% endfor %}
+<br><br>
+Winner:
+<br>
+{% for o in winner %}
+  {{o.0}}{% if not forloop.last %}, {% endif %}
+{% endfor %}
 {% endblock %}

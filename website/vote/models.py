@@ -5,6 +5,7 @@ from website.settings import CONFIG
 The .gliffy file contains ERD
 """
 
+
 class Election(models.Model):
     anon_voting = models.BooleanField(verbose_name="Anonymous Voting")
     multi_voting = models.BooleanField(verbose_name="Vote Multiple Times")
