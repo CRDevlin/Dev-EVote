@@ -20,13 +20,13 @@ class Faculty(models.Model):
 
 
 class Nominee(models.Model):
-    election = models.ForeignKey(Election, verbose_name="Election", null=True)
-    faculty = models.ForeignKey(Faculty, verbose_name="Faculty", null=True)
+    election = models.ForeignKey(Election, verbose_name="Election", null=True, on_delete=models.DO_NOTHING)
+    faculty = models.ForeignKey(Faculty, verbose_name="Faculty", null=True, on_delete=models.DO_NOTHING)
 
 
 class Record(models.Model):
-    choice = models.ForeignKey(Nominee, verbose_name="Nominee", null=True, related_name="Nominee")
-    election = models.ForeignKey(Election, verbose_name="Election", null=False, related_name="Election")
-    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter")
+    choice = models.ForeignKey(Nominee, verbose_name="Nominee", null=True, related_name="Nominee", on_delete=models.DO_NOTHING)
+    election = models.ForeignKey(Election, verbose_name="Election", null=False, related_name="Election", on_delete=models.DO_NOTHING)
+    voter = models.ForeignKey(Faculty, verbose_name="Faculty", null=False, related_name="Voter", on_delete=models.DO_NOTHING)
     token = models.CharField(max_length=CONFIG['VOTE_TOKEN_LEN'], verbose_name="Voter Token", unique=True)
     weight = models.FloatField(verbose_name="Voter Weight")
