@@ -1,5 +1,0 @@
-Delete db.sqlite3
-
-Run to recreate db.sqlite3
-
-python manage.py migrate --run-syncdb
