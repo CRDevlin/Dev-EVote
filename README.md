@@ -35,6 +35,7 @@ If you want to purge the entire database
 > run the syncdb command above
 
 Django implements the database manipulation using an object oriented paradigm.
+
 _models.py_ contains information on the data models used in EVote.
 
 _queries.py_ contains direct data model manipulation and lookup (Not just queries).
