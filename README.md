@@ -21,10 +21,11 @@ If you want to purge the entire database
 Django implements the database manipulation using an object oriented paradigm.
 _models.py_ contains information on the data models used in EVote.
 
-_queries.py_ contains direct data model manipulation (Not just queries).
+_queries.py_ contains direct data model manipulation and lookup (Not just queries).
 
 The Entity Relationship Diagram (ERD) is located in a gliffy file in the root folder.
-In order to open the file
+
+In order to open the .gliffy file
 
 > Install Google Chrome
 
@@ -32,4 +33,14 @@ In order to open the file
 
 > Install "Gliffy Diagrams"
 
-EVote's database model stores not only information about the current election, but also all past elections. It also maintains a database of faculty that have participated in elections, whether they were nominees or voters. Currently there is no way of obtaining tokens from old elections so the only solution is to hold on to important tokens or implement the functionality.
+EVote's database model stores not only information about the current election, but also all past elections. It also maintains a database of all faculty that have participated in elections and whether they were nominees or voters. Currently there is no way of obtaining tokens from old elections so the only solution is to hold on to important tokens or implement the functionality.
+
+### TODO
+Implement an error message label that appears upon exception (Ex. Invalid token, election expired, you already voted).
+
+_queries.py_: Disable voting access to an election after the deadline.
+
+_forms.py_: Implement AdminDateWidget and AdminTimeWidget in order to use widgets to easily select a date and time when making a new election.
+https://stackoverflow.com/questions/38601/using-django-time-date-widgets-in-custom-form
+
+Although Django itself is relatively secure and is constantly updating it's security, we need to implement the security features. This includes requiring authentication in order to see election results and creating a new election. We also need to explicitly allow certain hosts with access under _website/website/settings.py_
