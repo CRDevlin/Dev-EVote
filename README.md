@@ -32,4 +32,4 @@ In order to open the file
 
 > Install "Gliffy Diagrams"
 
-EVote's database model stores not only information about the current election, but also all past elections. It also keeps track of faculty that have participated in elections, whether they are nominees or voters. 
+EVote's database model stores not only information about the current election, but also all past elections. It also maintains a database of faculty that have participated in elections, whether they were nominees or voters. Currently there is no way of obtaining tokens from old elections so the only solution is to hold on to important tokens or implement the functionality.
