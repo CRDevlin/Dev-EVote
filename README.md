@@ -1,7 +1,23 @@
 # EVote
 
+EVote is a weighted faculty election system created using the Django web framework (1.11.6), written in Python (Python 3.6.2).
+For a vast amount of information on how Django implements its MVC framework, refer to the documentation.
+https://docs.djangoproject.com/en/2.0/
+
+### Debugging
+
+To run a debug instance of EVote 
+
+navigate to _website/website/settings.py_ and set DEBUG=True
+
+Then run
+
+> python3 \website\manage.py runserver
+
+
+
 ### Database
-For a vast amount of information on how Django implements databases and on how to perform queries please refer to the Django docs.
+For information on how Django implements databases and on how to perform queries please refer to the Django docs.
 
 https://docs.djangoproject.com/en/2.0/ref/databases/
 
