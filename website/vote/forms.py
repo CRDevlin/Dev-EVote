@@ -28,8 +28,8 @@ class VoteForm(forms.Form):
         super(VoteForm, self).__init__(*args, **kwargs)
         self.fields['choice'] = forms.ChoiceField(label='Candidates:', choices=choices, widget=forms.RadioSelect)
 
+
 # TODO: Implement AdminDateWidget and AdminTimeWidget
-# https://stackoverflow.com/questions/38601/using-django-time-date-widgets-in-custom-form
 class ElectionUploadForm(forms.Form):
     """
     Form for creating a new election.

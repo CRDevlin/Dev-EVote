@@ -28,9 +28,9 @@ def create_election(voter_path, nominee_path, anon, multi_vote, date, time):
     voters, weights = db.insert_faculty(voters, True)
     faculty, _ = db.insert_faculty(nominees, False)
     election = db.insert_election(anon,
-                               multi_vote,
-                               date,
-                               time)
+                                  multi_vote,
+                                  date,
+                                  time)
     db.insert_nominee(faculty, election)
     db.insert_record(voters, weights, election)
     return election.token
