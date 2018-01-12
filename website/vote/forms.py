@@ -36,7 +36,7 @@ class ElectionUploadForm(forms.Form):
     """
     voter_file = forms.FileField()
     nominee_file = forms.FileField()
-    date = forms.DateField(label='Date to Vote by', widget=AdminDateWidget)
-    time = forms.TimeField(label='Time to Vote by', widget=AdminTimeWidget)
+    date = forms.DateField(label='Date to Vote by') #, widget=AdminDateWidget)
+    time = forms.TimeField(label='Time to Vote by') #, widget=AdminTimeWidget)
     multi_vote = forms.BooleanField(label='Multi-Vote', required=False)
     anonymous = forms.BooleanField(label='Anonymous Voting', required=False)
