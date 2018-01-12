@@ -61,3 +61,5 @@ _forms.py_: Implement AdminDateWidget and AdminTimeWidget in order to use widget
 https://stackoverflow.com/questions/38601/using-django-time-date-widgets-in-custom-form
 
 Although Django itself is relatively secure and is constantly updating it's security, we need to implement the security features. This includes requiring authentication in order to see election results and creating a new election. We also need to explicitly allow certain hosts with access under _website/website/settings.py_
+
+https://docs.djangoproject.com/en/2.0/topics/security/
