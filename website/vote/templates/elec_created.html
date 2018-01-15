@@ -1,0 +1,8 @@
+{% include "base.html" %}
+{% block content %}
+
+{% csrf_token %}
+
+Election created. The election token is <b> {{ elect_token }} </b>
+
+{% endblock %}

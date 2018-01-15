@@ -45,15 +45,15 @@ def new_election(request):
     if request.method == 'POST':
         form = ElectionUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(CONFIG['VOTER_PATH'], form.cleaned_data['voter_file'])
-            handle_uploaded_file(CONFIG['NOMINEE_PATH'], form.cleaned_data['nominee_file'])
-            result = create_election(CONFIG['VOTER_PATH'],
-                                     CONFIG['NOMINEE_PATH'],
+            handle_uploaded_file(CONFIG['FILE_PATH'], CONFIG['VOTER_FILE_NAME'], form.cleaned_data['voter_file'])
+            handle_uploaded_file(CONFIG['FILE_PATH'], CONFIG['NOMINEE_FILE_NAME'], form.cleaned_data['nominee_file'])
+            result = create_election(CONFIG['FILE_PATH'] + '/' + CONFIG['VOTER_FILE_NAME'],
+                                     CONFIG['FILE_PATH'] + '/' + CONFIG['NOMINEE_FILE_NAME'],
                                      form.cleaned_data["anonymous"],
                                      form.cleaned_data["multi_vote"],
                                      form.cleaned_data["date"],
                                      form.cleaned_data["time"])
-            return HttpResponse("Election created. The election token is <b>" + result + "</b>")
+            return render(request, "elec_created.html", {'elect_token': result})
         else:
             print(form.errors)
     else:

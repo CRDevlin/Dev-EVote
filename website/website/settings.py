@@ -22,8 +22,9 @@ CONFIG = {
     'MAX_EMAIL_LEN': 50,
     'MAX_NAME_LEN': 50,
     'MAX_CHUNK_SIZE': 1024,
-    'NOMINEE_PATH': 'uploaded/nominee.json',
-    'VOTER_PATH': 'uploaded/voter.json',
+    'FILE_PATH': 'uploaded',
+    'NOMINEE_FILE_NAME': 'nominee.json',
+    'VOTER_FILE_NAME': 'voter.json',
     'FACULTY_KEYS': ['FIRST_NAME', 'LAST_NAME', 'EMAIL']
 }
 
@@ -98,11 +99,6 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = (
-    # ... your other backends
-    'yourapp.auth_backend.PasswordlessAuthBackend',
-)
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -134,6 +130,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# HTTPS settings
 
 SESSION_COOKIE_SECURE = True
 
