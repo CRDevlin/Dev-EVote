@@ -35,7 +35,7 @@ CONFIG = {
 SECRET_KEY = '1pq&u4tbm837a(!j7*+0x^$z73f^z*xfd7!ex4k9w2jl2yllm9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
