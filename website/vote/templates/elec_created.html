@@ -4,5 +4,13 @@
 {% csrf_token %}
 
 Election created. The election token is <b> {{ elect_token }} </b>
+<br><br>
+Voter tokens:
+<br>
+{% for r in records %}
+  {{r.voter.first_name}} {{r.voter.last_name}} - <b>{{r.token}}</b>
+  <br>
+{% endfor %}
+
 
 {% endblock %}

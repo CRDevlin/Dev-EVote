@@ -47,13 +47,13 @@ def new_election(request):
         if form.is_valid():
             handle_uploaded_file(CONFIG['FILE_PATH'], CONFIG['VOTER_FILE_NAME'], form.cleaned_data['voter_file'])
             handle_uploaded_file(CONFIG['FILE_PATH'], CONFIG['NOMINEE_FILE_NAME'], form.cleaned_data['nominee_file'])
-            result = create_election(CONFIG['FILE_PATH'] + '/' + CONFIG['VOTER_FILE_NAME'],
+            elect_token, records = create_election(CONFIG['FILE_PATH'] + '/' + CONFIG['VOTER_FILE_NAME'],
                                      CONFIG['FILE_PATH'] + '/' + CONFIG['NOMINEE_FILE_NAME'],
                                      form.cleaned_data["anonymous"],
                                      form.cleaned_data["multi_vote"],
                                      form.cleaned_data["date"],
                                      form.cleaned_data["time"])
-            return render(request, "elec_created.html", {'elect_token': result})
+            return render(request, "elec_created.html", {'elect_token': elect_token, 'records': records})
         else:
             print(form.errors)
     else:

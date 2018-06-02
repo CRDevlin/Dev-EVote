@@ -32,8 +32,8 @@ def create_election(voter_path, nominee_path, anon, multi_vote, date, time):
                                   date,
                                   time)
     db.insert_nominee(faculty, election)
-    db.insert_record(voters, weights, election)
-    return election.token
+    records = db.insert_record(voters, weights, election)
+    return election.token, records
 
 
 def validate_voter_token(voter_token):
