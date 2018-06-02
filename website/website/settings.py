@@ -133,17 +133,17 @@ USE_TZ = True
 
 # HTTPS settings
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-SECURE_SLL_REDIRECT = True
+SECURE_SLL_REDIRECT = False
 
-os.environ['wsgi.url_scheme'] = 'https'
+# os.environ['wsgi.url_scheme'] = 'https'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

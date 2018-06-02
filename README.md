@@ -24,6 +24,8 @@ https://docs.djangoproject.com/en/2.0/ref/databases/
 https://docs.djangoproject.com/en/2.0/topics/db/queries/
 
 Django uses mysql stored in \website\db.sqlite3. If no such file exists then run.
+> source ~/django/bin/activate
+
 > python manage.py migrate --run-syncdb
 
 If you want to purge the entire database
