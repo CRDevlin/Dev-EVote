@@ -55,6 +55,15 @@ In order to open the .gliffy file
 EVote's database model stores not only information about the current election, but also all past elections. It also maintains a database of all faculty that have participated in elections and whether they were nominees or voters. Currently there is no way of obtaining tokens from old elections so the only solution is to hold on to important tokens or implement the functionality.
 
 ### TODO
+Implement proper logging
+
+Implement SSL
+Option 1:
+Using nginx
+Option 2:
+Using AWS Certificate Manager
+https://aws.amazon.com/certificate-manager/ (Verify that it's free with Amazon EC2)
+
 Implement an error message label that appears upon exception (Ex. Invalid token, election expired, you already voted).
 
 _queries.py_: Disable voting access to an election after the deadline.
