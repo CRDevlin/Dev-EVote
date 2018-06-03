@@ -8,6 +8,8 @@ Ballots:
 {% for o in ballot %}
   <b>{{o.0}}</b> voted for <b>{{o.1}}</b>
   <br>
+{% empty %}
+No one has voted yet.
 {% endfor %}
 <br><br>
 {% endif %}
@@ -17,11 +19,15 @@ Scores:
 {% for o in result %}
   {{o.0}}: {{o.1}}
   <br>
+{% empty %}
+No scores yet.
 {% endfor %}
 <br><br>
 Winner:
 <br>
 {% for o in winner %}
   {{o.0}}{% if not forloop.last %}, {% endif %}
+{% empty %}
+Winner undecided yet
 {% endfor %}
 {% endblock %}

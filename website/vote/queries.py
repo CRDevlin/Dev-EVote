@@ -51,34 +51,36 @@ def get_election_results(election_token):
         res['BALLOT'] = []
         for record in list(r):
             v = record.voter  # Voter
-            n = record.choice.faculty  # Voter choice
-            ballot = (v.first_name + ' ' + v.last_name, n.first_name + ' ' + n.last_name)
-            res['BALLOT'].append(ballot)
+            if record.choice is not None:
+                # Voter choice
+                n = record.choice.faculty
+                ballot = (v.first_name + ' ' + v.last_name, n.first_name + ' ' + n.last_name)
+                res['BALLOT'].append(ballot)
 
     # Aggregate based on field Record.choice, add all the weights
     # Creates a dictionary for each nomineee [{'choice': Nominee1, 'total_weight': Val1}, ...]
     R = r.values('choice').annotate(total_weight=Sum('weight'))
 
     for record in R:
-        # Get nominee first/last name
-        f = Nominee.objects.get(id=record['choice']).faculty
-        f_name = f.first_name + ' ' + f.last_name
-        # Convert the weight into a percentage
-        percent = record['total_weight'] * 100
-        score = (f_name, percent)
+        # Get nominee first/last
+        if record['choice'] is not None:
+            f = Nominee.objects.get(id=record['choice']).faculty
+            f_name = f.first_name + ' ' + f.last_name
+            # Convert the weight into a percentage
+            percent = record['total_weight'] * 100
+            score = (f_name, percent)
 
-        # Calculate the winner (With the highest score)
-        if len(res['WINNER']) == 0:
-            res['WINNER'].append(score)
-        else:
-            if res['WINNER'][0][1] < percent:  # This nominee has a higher score, replace it
-                res['WINNER'].clear()
+            # Calculate the winner (With the highest score)
+            if len(res['WINNER']) == 0:
                 res['WINNER'].append(score)
-            elif res['WINNER'][0][1] == percent:  # In the event of a tie
-                res['WINNER'].append(score)
+            else:
+                if res['WINNER'][0][1] < percent:  # This nominee has a higher score, replace it
+                    res['WINNER'].clear()
+                    res['WINNER'].append(score)
+                elif res['WINNER'][0][1] == percent:  # In the event of a tie
+                    res['WINNER'].append(score)
 
-        res['RESULT'].append(score)
-
+            res['RESULT'].append(score)
     return res
 
 

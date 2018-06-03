@@ -76,6 +76,8 @@ def results(request):
                 print(e)
             except ValueError as e:
                 print(e)
+            except Exception as e:
+                print(e)
     else:
         form = ElectionResTokenForm(CONFIG['ELEC_TOKEN_LEN'])
 
