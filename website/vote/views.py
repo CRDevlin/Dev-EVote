@@ -104,3 +104,25 @@ def vote(request):
         form = VoteForm(choices)
 
     return render(request, "vote.html", {'form': form})
+
+
+def voter_token_recover(request):
+    if request.method == 'POST':
+        form = ElectionResTokenForm(CONFIG['ELEC_TOKEN_LEN'], request.POST)
+
+        if form.is_valid():
+            token = form.cleaned_data['token']
+            try:
+                validate_election_token(token)
+                res = get_voter_tokens(token)
+                return render(request, "voter_token_recovery.html", {'res': res})
+            except LookupError as e:
+                print(e)
+            except ValueError as e:
+                print(e)
+            except Exception as e:
+                print(e)
+    else:
+        form = ElectionResTokenForm(CONFIG['ELEC_TOKEN_LEN'])
+
+    return render(request, "token_form.html", {'form': form})

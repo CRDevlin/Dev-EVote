@@ -1,0 +1,17 @@
+{% include "base.html" %}
+{% block content %}
+{% csrf_token %}
+
+Voters Tokens:
+{% if res != None %}
+<br><br>
+{% for r in res %}
+  {{r.NAME}}     {{r.EMAIL}}     <b>{{r.TOKEN}}</b>
+  <br><br>
+{% empty %}
+No voter tokens found.
+{% endfor %}
+<br><br>
+{% endif %}
+
+{% endblock %}

@@ -207,3 +207,24 @@ def set_nominee_choice(voter_token, ref_nominee):
         r.save()
     except Record.DoesNotExist:
         raise ValueError('Invalid token')
+
+
+def get_voter_tokens(election_token):
+    """
+    Query voter tokens given election token
+    :param election_token:
+    :return:
+    """
+    res = []
+
+    e = Election.objects.get(token=election_token)
+    r = Record.objects.filter(election=e)  # Get all records from a specific election
+
+    for record in list(r):
+        # Voter
+        v = record.voter
+        voter_info = {'NAME': v.first_name + ' ' + v.last_name,
+                      'EMAIL': v.email,
+                      'TOKEN': record.token}
+        res.append(voter_info)
+    return res

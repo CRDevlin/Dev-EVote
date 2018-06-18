@@ -87,3 +87,12 @@ def get_election_results(election_token):
              The winner of the election with the highest percentage score
     """
     return db.get_election_results(election_token)
+
+
+def get_voter_tokens(election_token):
+    """
+    Get a list of voter tokens given an election token
+    :param election_token:
+    :return:
+    """
+    return db.get_voter_tokens(election_token)

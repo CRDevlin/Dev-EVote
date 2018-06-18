@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^admin$', RedirectView.as_view(url='admin/')),
     url(r'^vote/$', views.vote),
     url(r'^vote$', RedirectView.as_view(url='vote/')),
+    url(r'^recover/$', views.voter_token_recover, name='recover'),
+    url(r'^recover$', RedirectView.as_view(url='recover/')),
     url(r'^$', views.index),
     url(r'^', views.http404)
 ]
