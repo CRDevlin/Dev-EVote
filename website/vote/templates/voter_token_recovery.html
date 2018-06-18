@@ -6,7 +6,7 @@ Voters Tokens:
 {% if res != None %}
 <br><br>
 {% for r in res %}
-  {{r.NAME}}     {{r.EMAIL}}     <b>{{r.TOKEN}}</b>
+  {{r.NAME}}<br>{{r.EMAIL}}<br><b>{{r.TOKEN}}</b>
   <br><br>
 {% empty %}
 No voter tokens found.
